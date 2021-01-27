@@ -7,14 +7,15 @@ var engine, world;
 var box1,box2,box3,box4,box5,box6,box7,box8,box8,box9,box10,box11;
 var box12,box13,box14,box15,box16,box17,box18,box19,box20
 var backgroundImg,platform,platform2,platform3;
-var hexagon, slingshot;
+var polygon, slingshot;
+
 
 var gameState = "onSling";
 var bg = "sprites/bg1.png";
 var score = 0;
 
 function preload() {
-    getBackgroundImg();
+    backgroundImg=("sprites/browncolor.png")
 }
 
 function setup(){
@@ -54,15 +55,18 @@ function setup(){
     box19 = new Box(1360,150,70,70);
     box20 = new Box(1310,100,70,70);
 
-    hexagon = new Hexagon(200,50);
+    polygon = new Polygon(100, 280, 40);
+
+
 
     //log6 = new Log(230,180,80, PI/2);
-    slingshot = new SlingShot(hexagon.body,{x:200, y:345});
+    slingshot = new SlingShot(polygon.body,{x:200, y:345});
+
+
 }
 
 function draw(){
-    if(backgroundImg)
-        background(backgroundImg);
+        background("#402820");
     
         noStroke();
         textSize(35)
@@ -96,7 +100,7 @@ function draw(){
     box20.display();
 
     
-    hexagon.display();
+    polygon.display();
     platform.display();
     platform2.display();
     platform3.display();
@@ -105,7 +109,7 @@ function draw(){
 
 function mouseDragged(){
    // if (gameState!=="launched"){
-        Matter.Body.setPosition(hexagon.body, {x: mouseX , y: mouseY});
+        Matter.Body.setPosition(polygon.body, {x: mouseX , y: mouseY});
   //  }
 }
 
@@ -117,28 +121,11 @@ function mouseReleased(){
 }
 
 function keyPressed(){
-    if(keyCode === 32 && hexagon.body.speed<1){   
-      hexagon.trajectory=[]; 
-      Matter.Body.setPosition(hexagon.body,{x:200 , y:50});
-        slingshot.attach(hexagon.body);
+    if(keyCode === 32 && polygon.body.speed<1){   
+      polygon.trajectory=[]; 
+      Matter.Body.setPosition(polygon.body,{x:200 , y:50});
+        slingshot.attach(polygon.body);
      
     }
 }
 
-async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
-    var responseJSON = await response.json();
-
-    var datetime = responseJSON.datetime;
-    var hour = datetime.slice(11,13);
-    
-    if(hour>=06 && hour<=19){
-        bg = "sprites/bg1.png";
-    }
-    else{
-        bg = "sprites/bg2.jpg";
-    }
-
-    backgroundImg = loadImage(bg);
-    console.log(backgroundImg);
-}
